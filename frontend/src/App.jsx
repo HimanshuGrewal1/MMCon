@@ -1,11 +1,14 @@
-import React from 'react'
+import { Routes, Route } from "react-router-dom";
+import LandingPage from "./Pages/Landingpage";
+import SignupPage from "./Pages/SignupPage";
+import ResetPassword from "./Pages/ResetPassword";
 
-const App = () => {
+export default function App() {
   return (
-	<div>
-	  
-	</div>
-  )
+    <Routes>
+      <Route path="/" element={<LandingPage />} />
+      <Route path="/signup" element={<SignupPage />} />
+      <Route path="/reset-password" element={<ResetPassword />} />
+    </Routes>
+  );
 }
-
-export default App
