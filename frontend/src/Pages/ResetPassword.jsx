@@ -1,94 +1,88 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { useAuthStore } from "../store/authStore";
+import { useNavigate, useParams } from "react-router-dom";
+import Input from "../components/Input";
+import { Lock } from "lucide-react";
+import toast from "react-hot-toast";
 
-export default function ResetPassword() {
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState(false);
+const ResetPassword = () => {
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+	const { resetPassword, error, isLoading, message } = useAuthStore();
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
+	const { token } = useParams();
+	const navigate = useNavigate();
 
-    if (!email.includes("@")) {
-      setError(true);
-      setMessage("Please enter a valid email address.");
-      return;
-    }
+	const handleSubmit = async (e) => {
+		e.preventDefault();
 
-    setError(false);
-    setMessage("A reset link has been sent to your email.");
+		if (password !== confirmPassword) {
+			toast.error("Passwords do not match");
+			return;
+		} 
+		if(password.length <4 ){
+			toast.error("The password length must be more than 4 characters");
+			return;
+		}
+		try {
+			await resetPassword(token, password);
 
-    console.log("Reset password request for:", email);
+			toast.success("Password reset successfully, redirecting to login page...");
+			setTimeout(() => {
+				navigate("/login");
+			}, 2000);
+		} catch (error) {
+			console.error(error);
+			toast.error(error.message || "Error resetting password");
+		}
+	};
 
-    setTimeout(() => {
-      setMessage("If the email exists in our system, a reset link has been sent.");
-    }, 1500);
-  };
+	return (
+		<motion.div
+			initial={{ opacity: 0, y: 20 }}
+			animate={{ opacity: 1, y: 0 }}
+			transition={{ duration: 0.5 }}
+			className='max-w-md w-full bg-gray-800 bg-opacity-50 backdrop-filter backdrop-blur-xl rounded-2xl shadow-xl overflow-hidden'
+		>
+			<div className='p-8'>
+				<h2 className='text-3xl font-bold mb-6 text-center bg-gradient-to-r from-green-400 to-emerald-500 text-transparent bg-clip-text'>
+					Reset Password
+				</h2>
+				{error && <p className='text-red-500 text-sm mb-4'>{error}</p>}
+				{message && <p className='text-green-500 text-sm mb-4'>{message}</p>}
 
-  return (
-    <motion.div
-      className="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-50 to-blue-50"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 1 }}
-    >
-      <motion.div
-        className="bg-white p-10 rounded-3xl shadow-2xl w-full max-w-md border border-gray-200"
-        initial={{ y: 50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.8, delay: 0.3 }}
-      >
-        <h2 className="text-3xl font-bold text-center text-blue-700 mb-6">
-          Reset Your Password
-        </h2>
+				<form onSubmit={handleSubmit}>
+					<Input
+						icon={Lock}
+						type='password'
+						placeholder='New Password'
+						value={password}
+						onChange={(e) => setPassword(e.target.value)}
+						required
+					/>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <motion.div
-            className="relative"
-            whileFocus={{ scale: 1.02 }}
-          >
-            <label className="block mb-2 text-gray-700 font-medium">
-              Email Address
-            </label>
-            <input
-              type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-300 bg-gray-50 transition duration-300"
-              placeholder="example@email.com"
-              required
-            />
-          </motion.div>
+					<Input
+						icon={Lock}
+						type='password'
+						placeholder='Confirm New Password'
+						value={confirmPassword}
+						onChange={(e) => setConfirmPassword(e.target.value)}
+						required
+					/>
 
-          <motion.button
-            type="submit"
-            className="w-full py-3 rounded-lg font-semibold text-white bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 transition-all duration-300 shadow-lg"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            Send Reset Link
-          </motion.button>
-        </form>
-
-        {message && (
-          <motion.p
-            className={`mt-4 text-center ${error ? "text-red-500" : "text-green-600"}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            transition={{ duration: 0.5 }}
-          >
-            {message}
-          </motion.p>
-        )}
-
-        <p className="mt-6 text-center text-gray-600">
-          Remembered your password?{" "}
-          <Link to="/" className="text-blue-600 font-semibold hover:underline">
-            Login
-          </Link>
-        </p>
-      </motion.div>
-    </motion.div>
-  );
-}
+					<motion.button
+						whileHover={{ scale: 1.02 }}
+						whileTap={{ scale: 0.98 }}
+						className='w-full py-3 px-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-lg shadow-lg hover:from-green-600 hover:to-emerald-700 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 focus:ring-offset-gray-900 transition duration-200'
+						type='submit'
+						disabled={isLoading}
+					>
+						{isLoading ? "Resetting..." : "Set New Password"}
+					</motion.button>
+				</form>
+			</div>
+		</motion.div>
+	);
+};
+export default ResetPassword;
