@@ -47,8 +47,7 @@ export default function App() {
 
 	return (
 		<div
-			className='min-h-screen bg-gradient-to-br
-    from-gray-900 via-blue-500 to-blue-900 flex items-center justify-center relative overflow-hidden'
+			
 		>
 	
            {/* <Navbar/> */}
