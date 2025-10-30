@@ -1,8 +1,9 @@
 import { Routes, Route } from "react-router-dom";
-import LandingPage from "./Pages/Landingpage";
+import LandingPage from "./Pages/LandingPage";
 import SignupPage from "./Pages/SignupPage";
 import ResetPassword from "./Pages/ResetPassword";
 import LoginPage from "./Pages/LoginPage";
+import HomePage from "./Pages/HomePage";
 import EmailVerificationPage from "./Pages/EmailVerficationPage";
 import ForgotPasswordPage from "./Pages/ForgotPasswordPage";
 import { Toaster } from "react-hot-toast";
@@ -30,7 +31,7 @@ const RedirectAuthenticatedUser = ({ children }) => {
 	const { isAuthenticated, user } = useAuthStore();
 
 	if (isAuthenticated && user.isVerified) {
-		return <Navigate to='/Home' replace />;
+		return <Navigate to='/home' replace />;
 	}
 
 	return children;
@@ -47,7 +48,8 @@ export default function App() {
 
 	return (
 		<div
-			
+			className='min-h-screen bg-gradient-to-br
+    from-gray-900 via-blue-500 to-blue-900 flex items-center justify-center relative overflow-hidden'
 		>
 	
            {/* <Navbar/> */}
@@ -55,10 +57,10 @@ export default function App() {
 			
           <Route path='/' element={<LandingPage />} />
         <Route
-          path='/Home'
+          path='/home'
           element={
             <ProtectedRoute>
-              <LandingPage />
+              <HomePage />
             </ProtectedRoute>
           }
         />
@@ -98,7 +100,6 @@ export default function App() {
 						</RedirectAuthenticatedUser>
 					}
 				/>
-				
 				<Route path='*' element={<Navigate to='/' replace />} />
 			</Routes>
 			<Toaster />

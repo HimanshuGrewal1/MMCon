@@ -20,7 +20,9 @@ export default function Navbar() {
 
         {/* Links */}
         <div className="hidden md:flex gap-8 items-center">
-          <Link className="group relative text-gray-700 font-medium hover:text-indigo-500 transition">
+          <Link className="group relative text-gray-700 font-medium hover:text-indigo-500 transition"
+            to="/home"
+          >
             Home
             <span className="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-indigo-500"></span>
           </Link>
