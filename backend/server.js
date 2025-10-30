@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import path from "path";
 import authRoutes from "./src/routes/auth.route.js";
+import projectRoutes from "./src/routes/projects.route.js";
 
 const app = express();
 dotenv.config()
@@ -19,6 +20,7 @@ app.get("/",(req,res)=>{
 })
 
 app.use("/api/auth", authRoutes);
+app.use("/api/projects",projectRoutes);
 
 
 

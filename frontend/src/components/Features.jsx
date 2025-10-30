@@ -1,4 +1,4 @@
-import FeatureCard from "./Featurecard";
+import FeatureCard from "./FeatureCard";
 import { FileText, Cpu, Share2 } from "lucide-react";
 
 export default function Features() {
