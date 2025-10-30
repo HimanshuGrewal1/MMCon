@@ -7,39 +7,46 @@ export default function Navbar() {
       initial={{ opacity: 0, y: -20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
-      className="fixed w-full z-50 bg-white shadow-lg"
+      className="fixed w-full z-50 bg-navbg shadow-lg"
     >
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
-        <Link
-          to="/"
-          className="text-3xl font-extrabold text-indigo-600 hover:text-indigo-500 transition-all duration-300"
-        >
-          MindMap
-        </Link>
+        <Link to="/" className="flex items-center">
+  <img
+    src="./logo.png"
+    alt="Logo"
+    className="h-[65px] w-auto object-contain"
+  />
+</Link>
+
 
         {/* Links */}
         <div className="hidden md:flex gap-8 items-center">
-          <Link className="group relative text-gray-700 font-medium hover:text-indigo-500 transition">
+          <Link
+            className="group relative text-navfont font-medium transition-colors duration-300"
+          >
             Home
-            <span className="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-indigo-500"></span>
+            <span className="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-green-500"></span>
           </Link>
+
 
           <Link
             to="/signup"
-            className="group relative text-gray-700 font-medium hover:text-indigo-500 transition"
+            className="group relative text-navfont font-medium transition-colors duration-300"
           >
-            Signup
-            <span className="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-indigo-500"></span>
+            SignUp
+            <span className="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-green-500"></span>
           </Link>
 
+
           <Link
-            to="/reset-password"
-            className="group relative text-gray-700 font-medium hover:text-indigo-500 transition"
+            to='/login'
+            className="group relative text-navfont font-medium transition-colors duration-300"
           >
-            Reset Password
-            <span className="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-indigo-500"></span>
+            Login
+            <span className="block max-w-0 group-hover:max-w-full transition-all duration-300 h-0.5 bg-green-500"></span>
           </Link>
+
         </div>
 
         {/* Mobile menu button */}

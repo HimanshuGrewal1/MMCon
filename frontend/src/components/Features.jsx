@@ -21,9 +21,9 @@ export default function Features() {
   ];
 
   return (
-    <section id="features" className="py-20 bg-gray-50">
+    <section id="features" className="py-20 bg-darkbg">
       <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center text-gray-800 mb-12">
+        <h2 className="text-4xl font-bold text-center text-white mb-12">
           Features
         </h2>
         <div className="grid gap-8 md:grid-cols-3">
