@@ -224,7 +224,7 @@ export default function LoginPage() {
 
       if (response.ok) {
         if (data.token) localStorage.setItem("token", data.token);
-        navigate("/dashboard");
+        navigate("/home");
       } else {
         setError(data.message || "Invalid credentials.");
       }

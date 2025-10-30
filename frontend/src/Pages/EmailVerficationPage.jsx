@@ -67,7 +67,7 @@ export default function EmailVerificationPage() {
 
       if (response.ok) {
         console.log("Email verified successfully:", data);
-        navigate("/"); // Redirect to login or dashboard
+        navigate("/home"); // Redirect to login or dashboard
       } else {
         setError(data.message || "Verification failed");
       }
