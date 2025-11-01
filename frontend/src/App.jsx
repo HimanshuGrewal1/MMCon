@@ -11,6 +11,9 @@ import { useEffect } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/authStore"
 import LoadingSpinner from "./components/LoadingSpinner";
+import MindMap from "./MapRender";
+import { ReactFlowProvider } from "@xyflow/react";
+import MindMap2 from "./MapRender2";
 
 const ProtectedRoute = ({ children }) => {
 	const { isAuthenticated, user } = useAuthStore();
@@ -71,6 +74,22 @@ export default function App() {
 						<RedirectAuthenticatedUser>
 							<SignupPage />
 						</RedirectAuthenticatedUser>
+					}
+				/>
+						<Route
+					path='/map'
+					element={
+				<ReactFlowProvider>
+							<MindMap />
+						</ReactFlowProvider>
+					}
+				/>
+						<Route
+					path='/map2'
+					element={
+				<ReactFlowProvider>
+							<MindMap2 />
+						</ReactFlowProvider>
 					}
 				/>
 				<Route
