@@ -58,13 +58,17 @@ const HomePage = () => {
   }
 
   const data = new FormData();
-  data.append('file', formData.pdf);
+data.append("file", formData.pdf);
+data.append("title", formData.title);
+data.append("description", formData.description);
 
   setIsSubmitting(true);
-  setLoading(true);
+  // setLoading(true);
+
+  console.log('Submitting form data:', data);
 
   try {
-    const res = await axios.post('http://127.0.0.1:8000/upload-pdf', data, {
+    const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/projects/project`,data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

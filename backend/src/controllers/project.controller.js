@@ -1,29 +1,49 @@
 import { Project } from "../models/Project.modle.js";
 import { Node } from "../models/node.modle.js";
 import { Edge } from "../models/edge.model.js";
+import cloudinary from "../utils/cloudinary.js";
+import fs from "fs";
 
+ 
 export const createProject = async (req, res) => {
-    const { title, description, pdflink } = req.body;
+  try {
+    console.log(req)
+    const { title, description } = req.body;
     const owner = req.userId;
-    try {
-        if (!title || !description || !pdflink) {
-            throw new Error("All fields are required");
-        }
-        const project = new Project({
-            owner,
-            title,
-            description,
-            pdflink
-        });
-        await project.save();
-        res.status(201).json({
-            success: true,
-            message: "Project created successfully",
-            project
-        });
-    } catch (error) {
-        res.status(400).json({ success: false, message: error.message });
+    console.log(req)
+
+    if (!title || !description ) {
+      throw new Error("All fields are required, including PDF");
     }
+
+    // Upload the PDF file to Cloudinary
+    // const result = await cloudinary.uploader.upload(req.file.path, {
+    //   resource_type: "raw", // required for PDFs
+    //   folder: "projects_pdfs",
+    // });
+
+    // Delete the local temp file
+    // fs.unlinkSync(req.file.path);
+
+    // Save project with Cloudinary PDF link
+    const project = new Project({
+      owner,
+      title,
+      description,
+  
+    });
+
+    await project.save();
+
+    res.status(201).json({
+      success: true,
+      message: "Project created successfully",
+      project,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(400).json({ success: false, message: error.message });
+  }
 };
 
 export const getProjectsByUser = async (req, res) => {
@@ -67,11 +87,11 @@ export const getProject = async (req, res) => {
 
 export const AddNote= async (req,res)=>{
     const {projectId}= req.params;
-    const {id,position,data,type,style}= req.body;
+    const {position,data,type,style}= req.body;
     try {{
         const newNode= new Node({
             projectId,
-            id,
+          
             position,
             data,
             type,
@@ -109,6 +129,28 @@ export const AddEdge= async (req,res)=>{
             success:true,
             message:"Edge added successfully",
             newEdge
+        });
+    }} catch (error) {
+        res.status(400).json({ success: false, message: error.message });
+    }
+}
+
+export const EditNode= async (req,res)=>{
+    const {projectId}= req.params;
+    const {id,position,data,type,style}= req.body;
+    try {{
+        const updatedNode= await Node.findOneAndUpdate(
+            { projectId, id },
+            { position, data, type, style },
+            { new: true }
+        );
+        if (!updatedNode) {
+            throw new Error("Node not found");
+        }
+        res.status(200).json({
+            success:true,
+            message:"Node updated successfully",
+            updatedNode
         });
     }} catch (error) {
         res.status(400).json({ success: false, message: error.message });

@@ -196,12 +196,15 @@
 
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import {useAuthStore }from '../store/authStore.js';
 
 export default function LoginPage() {
   const [formData, setFormData] = useState({ email: "", password: "" });
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuthStore();
+  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -212,27 +215,32 @@ export default function LoginPage() {
     e.preventDefault();
     setIsLoading(true);
     setError("");
+ 
+    login(formData.email, formData.password)
 
-    try {
-      const response = await fetch("http://localhost:5000/api/auth/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
-      });
+    // try {
+    //   const response = await fetch("http://localhost:5000/api/auth/login", {
+    //     method: "POST",
+    //     headers: { "Content-Type": "application/json" },
+    //     body: JSON.stringify(formData),
+    //     withCredentials: true,
+    //   });
 
-      const data = await response.json();
+    //   console.log("Response status:", response);
 
-      if (response.ok) {
-        if (data.token) localStorage.setItem("token", data.token);
-        navigate("/home");
-      } else {
-        setError(data.message || "Invalid credentials.");
-      }
-    } catch {
-      setError("Network error. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
+    //   const data = await response.json();
+
+    //   if (response.ok) {
+    //     if (data.token) localStorage.setItem("token", data.token);
+    //     navigate("/home");
+    //   } else {
+    //     setError(data.message || "Invalid credentials.");
+    //   }
+    // } catch {
+    //   setError("Network error. Please try again.");
+    // } finally {
+    //   setIsLoading(false);
+    // }
   };
 
   return (

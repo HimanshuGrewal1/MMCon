@@ -15,7 +15,7 @@ const ProjectScheme= new mongoose.Schema({
     },
     pdflink:{
         type: String,
-        required : true
+        // required : true
     }
 },{timestamps: true})
 
