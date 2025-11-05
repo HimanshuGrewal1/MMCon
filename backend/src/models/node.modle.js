@@ -5,7 +5,7 @@ const NodeScheme = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
          ref: 'Project'
     },
-  id: { type: String, required: true, unique: true },
+  id: { type: String },
   data: {
     label: { type: String, required: true },
     content: { type: String, required: true },
@@ -23,7 +23,7 @@ const NodeScheme = new mongoose.Schema({
     fontWeight: { type: String },
     border: { type: String },
     padding: { type: Number },
-    borderRadius: { type: Number },
+    borderRadius: { type: String },
     width: { type: Number },
     textAlign: { type: String },
     opacity: { type: Number },

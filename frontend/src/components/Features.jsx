@@ -4,36 +4,37 @@ import { FileText, Cpu, Share2 } from "lucide-react";
 export default function Features() {
   const features = [
     {
-      icon: <FileText size={40} />,
-      title: "Auto Text Extraction",
-      description: "Extracts important concepts from PDFs instantly using advanced NLP.",
+      icon: <FileText size={36} />,
+      title: "AI-Powered Extraction",
+      description:
+        "Intelligently captures core ideas from any document with precision.",
     },
     {
-      icon: <Cpu size={40} />,
+      icon: <Cpu size={36} />,
       title: "Smart Mind Mapping",
-      description: "Automatically organizes ideas in an intuitive visual structure.",
+      description:
+        "Transforms structured content into beautiful, dynamic visuals automatically.",
     },
     {
-      icon: <Share2 size={40} />,
-      title: "Easy Sharing",
-      description: "Save and share mind maps instantly with friends or colleagues.",
+      icon: <Share2 size={36} />,
+      title: "Effortless Collaboration",
+      description:
+        "Share your mind maps securely or collaborate in real-time.",
     },
   ];
 
   return (
-    <section id="features" className="py-20 bg-darkbg">
-      <div className="max-w-7xl mx-auto px-6">
-        <h2 className="text-4xl font-bold text-center text-white mb-12">
-          Features
+    <section className="relative py-24 bg-gradient-to-br from-[#f9fafb] to-[#edf2f6] text-gray-800 overflow-hidden">
+      <div className="relative max-w-7xl mx-auto px-6 z-10">
+        <h2 className="text-4xl font-bold text-center mb-12">
+          <span className="bg-gradient-to-r from-[#2dd4bf] to-[#0ea5e9] text-transparent bg-clip-text">
+            Features
+          </span>
         </h2>
-        <div className="grid gap-8 md:grid-cols-3">
+
+        <div className="grid gap-10 md:grid-cols-3 place-items-center">
           {features.map((feature, index) => (
-            <FeatureCard
-              key={index}
-              icon={feature.icon}
-              title={feature.title}
-              description={feature.description}
-            />
+            <FeatureCard key={index} {...feature} />
           ))}
         </div>
       </div>
