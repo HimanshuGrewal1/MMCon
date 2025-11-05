@@ -5,46 +5,59 @@ import cloudinary from "../utils/cloudinary.js";
 import fs from "fs";
 
  
+
+
 export const createProject = async (req, res) => {
   try {
-    console.log(req)
-    const { title, description } = req.body;
-    const owner = req.userId;
-    console.log(req)
-
-    if (!title || !description ) {
-      throw new Error("All fields are required, including PDF");
+    const { title, description, nodes = [], edges = [] } = req.body;
+    const owner = req.userId; // Ensure this comes from auth middleware
+    console.log(req.body);
+    if (!title || !description) {
+      return res.status(400).json({ success: false, message: "Title and description are required" });
     }
 
-    // Upload the PDF file to Cloudinary
-    // const result = await cloudinary.uploader.upload(req.file.path, {
-    //   resource_type: "raw", // required for PDFs
-    //   folder: "projects_pdfs",
-    // });
-
-    // Delete the local temp file
-    // fs.unlinkSync(req.file.path);
-
-    // Save project with Cloudinary PDF link
-    const project = new Project({
+    // Step 1: Create project
+    const project = await Project.create({
       owner,
       title,
       description,
-  
     });
 
-    await project.save();
+    // Step 2: Add projectId to nodes/edges
+    const projectId = project._id;
 
+    const createdNodes = await Node.insertMany(
+      nodes.map((n) => ({ ...n, projectId }))
+    );
+    const createdEdges = await Edge.insertMany(
+      edges.map((e) => ({ ...e, projectId }))
+    );
+
+    // Step 3: Send response
     res.status(201).json({
       success: true,
       message: "Project created successfully",
-      project,
+   
     });
   } catch (error) {
-    console.error(error);
-    res.status(400).json({ success: false, message: error.message });
+    console.error("Error creating project:", error);
+    res.status(500).json({ success: false, message: error.message });
   }
 };
+
+
+//     await project.save();
+
+//     res.status(201).json({
+//       success: true,
+//       message: "Project created successfully",
+//       project,
+//     });
+//   } catch (error) {
+//     console.error(error);
+//     res.status(400).json({ success: false, message: error.message });
+//   }
+// };
 
 export const getProjectsByUser = async (req, res) => {
     const owner = req.userId;

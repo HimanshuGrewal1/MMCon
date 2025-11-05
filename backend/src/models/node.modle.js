@@ -10,7 +10,7 @@ const NodeScheme = new mongoose.Schema({
     label: { type: String, required: true },
     content: { type: String, required: true },
     confidence: { type: Number, required: true },
-    type: { type: String, enum: ["process", "decision", "input", "output", "default"], default: "process" },
+    type: { type: String, required: true },
   },
   position: {
     x: { type: Number, required: true },

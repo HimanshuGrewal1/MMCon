@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const [showDialog, setShowDialog] = useState(false);
@@ -13,19 +14,22 @@ const HomePage = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const navigator = useNavigate();
 
-  // Fetch notebooks from backend
+ 
   useEffect(() => {
+   
     fetchNotebooks();
   }, []);
 
   const fetchNotebooks = async () => {
     try {
-      setError('');
+      const res = await axios.get('http://localhost:5000/api/projects/project', { withCredentials: true });
+      console.log('Fetched notebooks:', res.data);
       
-      // For demo purposes - replace with actual API calls
-      setFeaturedNotebooks(sampleFeaturedNotebooks);
-      setRecentNotebooks(sampleRecentNotebooks);
+     
+      setFeaturedNotebooks(sampleFeaturedNotebooks); 
+      setRecentNotebooks(res.data.projects);
 
     } catch (error) {
       console.error('Error fetching notebooks:', error);
@@ -56,26 +60,29 @@ const HomePage = () => {
     alert('Please provide a PDF file');
     return;
   }
+  console.log("form data : ",formData)
 
   const data = new FormData();
-data.append("file", formData.pdf);
-data.append("title", formData.title);
-data.append("description", formData.description);
+  data.append("pdf", formData.pdf);
+
 
   setIsSubmitting(true);
-  // setLoading(true);
+  setLoading(true);
 
   console.log('Submitting form data:', data);
 
   try {
-    const res = await axios.post(`${import.meta.env.VITE_API_URL}/api/projects/project`,data, {
+    const res = await axios.post("http://localhost:5001/api/pdf-to-graph",data, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
-      withCredentials: true,
+      withCredentials:true
     });
 
     console.log('Upload success:', res.data);
+    const res2 = await axios.post("http://localhost:5000/api/projects/project",{title : formData.title , description : formData.description , nodes : res.data.nodes , edges : res.data.edges})
+
+    console.log("successfuly created project" , res2)
     setFormData({ title: '', description: '', pdf: null });
     setShowDialog(false);
     await fetchNotebooks();
@@ -86,6 +93,11 @@ data.append("description", formData.description);
     setLoading(false);
     setIsSubmitting(false);
   }
+};
+
+const handleclick = (projectId) => {
+  console.log("clicked project id: ",projectId);
+  navigator(`/project/${projectId}` );
 };
 
 
@@ -138,29 +150,29 @@ data.append("description", formData.description);
     }
   ];
 
-  const sampleRecentNotebooks = [
-    {
-      id: 1,
-      title: 'MERN Authentication Guide',
-      description: 'Complete JWT and refresh tokens implementation',
-      createdAt: new Date().toISOString(),
-      progress: 100
-    },
-    {
-      id: 2,
-      title: 'Project Documentation',
-      description: 'API documentation and system architecture',
-      createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
-      progress: 75
-    },
-    {
-      id: 3,
-      title: 'Research Paper Analysis',
-      description: 'Machine learning research findings',
-      createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
-      progress: 30
-    }
-  ];
+  // const sampleRecentNotebooks = [
+  //   {
+  //     id: 1,
+  //     title: 'MERN Authentication Guide',
+  //     description: 'Complete JWT and refresh tokens implementation',
+  //     createdAt: new Date().toISOString(),
+  //     progress: 100
+  //   },
+  //   {
+  //     id: 2,
+  //     title: 'Project Documentation',
+  //     description: 'API documentation and system architecture',
+  //     createdAt: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toISOString(),
+  //     progress: 75
+  //   },
+  //   {
+  //     id: 3,
+  //     title: 'Research Paper Analysis',
+  //     description: 'Machine learning research findings',
+  //     createdAt: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000).toISOString(),
+  //     progress: 30
+  //   }
+  // ];
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-900 to-black text-white p-6">
@@ -208,6 +220,7 @@ data.append("description", formData.description);
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {sampleFeaturedNotebooks.map((notebook, index) => (
               <div 
+
                 key={notebook.id}
                 className="group bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 hover:border-blue-500/50 p-6 transition-all duration-500 hover:scale-105 hover:shadow-2xl hover:shadow-blue-500/20 cursor-pointer"
                 style={{ animationDelay: `${index * 100}ms` }}
@@ -249,7 +262,7 @@ data.append("description", formData.description);
           <div className="flex items-center justify-between mb-8">
             <h2 className="text-2xl font-bold text-white">Your Recent Projects</h2>
             <span className="text-gray-400 text-sm">
-              {sampleRecentNotebooks.length} projects
+              {recentNotebooks.length} projects
             </span>
           </div>
 
@@ -277,9 +290,10 @@ data.append("description", formData.description);
             </button>
 
             {/* Recent Notebooks List */}
-            {sampleRecentNotebooks.map((notebook, index) => (
+            {recentNotebooks.map((notebook, index) => (
               <div 
-                key={notebook.id}
+              onClick={()=>handleclick(notebook._id)}
+                key={notebook._id}
                 className="group bg-gray-800/50 backdrop-blur-sm rounded-xl border border-gray-700 hover:border-blue-500/50 p-6 transition-all duration-500 hover:scale-[1.02] hover:shadow-xl hover:shadow-blue-500/10 cursor-pointer"
                 style={{ animationDelay: `${index * 100}ms` }}
               >

@@ -85,7 +85,7 @@ export default function App() {
 					}
 				/>
 						<Route
-					path='/map2'
+					path='/project/:projectId'
 					element={
 				<ReactFlowProvider>
 							<MindMap2 />

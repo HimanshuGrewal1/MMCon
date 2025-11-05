@@ -10,6 +10,7 @@ import {
   addEdge,
 } from "reactflow";
 import "reactflow/dist/style.css";
+import axios from "axios";
 
 // ================== Context Menu ==================
 const ContextMenu = ({ position, node, onClose, onEdit, onAddNode, onDeleteNode }) => {
@@ -151,7 +152,7 @@ function MindMapContent() {
   const [nodes, setNodes, onNodesChange] = useNodesState([]);
   const [edges, setEdges, onEdgesChange] = useEdgesState([]);
   const [contextMenu, setContextMenu] = useState(null);
-  const projectId = "6903290c44e1ebf3d3d63067";
+  const projectId = window.location.pathname.split("/").pop();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -164,56 +165,10 @@ function MindMapContent() {
         setError(null);
 
         // Mock data (replace later with backend call)
-        const res = {
-          project_id: "default",
-          nodes: [
-            {
-              id: "61611568eb93",
-              data: {
-                label: "Data Structure and Dataset Statistics",
-                content:
-                  "The study employed a flattened JSON format for annotated data...",
-              },
-              position: { x: 0, y: 0 },
-              style: {
-                backgroundColor: "#3b82f6",
-                color: "white",
-                borderRadius: 12,
-                width: 250,
-                textAlign: "center",
-              },
-            },
-            {
-              id: "80235922a073",
-              data: {
-                label: "Emotionally Grounded Dialogue Generation",
-                content:
-                  "This research explores a dual-pathway architecture for emotionally intelligent dialogue...",
-              },
-              position: { x: 300, y: 0 },
-              style: {
-                backgroundColor: "#3b82f6",
-                color: "white",
-                borderRadius: 12,
-                width: 250,
-                textAlign: "center",
-              },
-            },
-          ],
-          edges: [
-            {
-              id: "e1",
-              source: "61611568eb93",
-              target: "80235922a073",
-              type: "smoothstep",
-              animated: true,
-              style: { stroke: "#3b82f6", strokeWidth: 3 },
-            },
-          ],
-        };
-
-        setNodes(res.nodes);
-        setEdges(res.edges);
+        const res = await axios.get(`http://localhost:5000/api/projects/project/${projectId}`);
+console.log("Fetched project data:", res.data);
+        setNodes(res.data.project.Nodes);
+        setEdges(res.data.project.Edges);
       } catch (err) {
         console.error("Error fetching project:", err);
         setError(err.message);
