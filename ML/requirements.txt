@@ -1,0 +1,39 @@
+# Core FastAPI stack
+fastapi==0.109.0
+uvicorn==0.27.0
+python-multipart==0.0.20
+pydantic==2.12.0
+starlette==0.35.1
+
+# Environment and utilities
+python-dotenv==1.1.1
+orjson==3.11.3
+
+# LangChain + embeddings
+langchain==0.3.27
+langchain-community==0.3.30
+langchain-core==0.3.78
+langchain-text-splitters==0.3.11
+sentence-transformers==5.1.1
+chromadb==1.2.1
+
+# PDF processing
+pypdf==6.1.1
+PyMuPDF==1.26.5
+
+# Data + math tools
+numpy==2.3.3
+scikit-learn==1.7.2
+
+# Google Gemini integration
+google-generativeai==0.8.5
+google-api-python-client==2.186.0
+google-auth==2.41.1
+google-auth-httplib2==0.2.1
+googleapis-common-protos==1.71.0
+grpcio==1.76.0
+protobuf==5.29.5
+
+# Optional utilities used in utils/
+tqdm==4.67.1
+requests==2.32.5
