@@ -37,6 +37,7 @@ export const createProject = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Project created successfully",
+      project: projectId 
    
     });
   } catch (error) {
@@ -100,11 +101,12 @@ export const getProject = async (req, res) => {
 
 export const AddNote= async (req,res)=>{
     const {projectId}= req.params;
-    const {position,data,type,style}= req.body;
+    const {position,data,type,id,style}= req.body;
+    console.log(req.body);
     try {{
         const newNode= new Node({
             projectId,
-          
+          id,
             position,
             data,
             type,
@@ -118,6 +120,7 @@ export const AddNote= async (req,res)=>{
         });
     }} catch (error) {
         res.status(400).json({ success: false, message: error.message });
+        console.log(error);
     }
 
 }
@@ -125,6 +128,7 @@ export const AddNote= async (req,res)=>{
 export const AddEdge= async (req,res)=>{
     const {projectId}= req.params;
     const {id,source,target,data,type,label,style,animated}= req.body;
+    console.log(req.body);
     try {{
         const newEdge= new Edge({
             projectId,
@@ -145,6 +149,7 @@ export const AddEdge= async (req,res)=>{
         });
     }} catch (error) {
         res.status(400).json({ success: false, message: error.message });
+        console.log(error);
     }
 }
 

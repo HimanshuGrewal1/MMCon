@@ -37,41 +37,50 @@ Represent this information as a JSON object containing nodes and edges suitable 
 Analyze the following text and return a JSON like this format:
 
 {
-  "project_id": "default",
-  "nodes": [
-    {
-      "id": "randomId",
-      "data": {
-        "label": "Topic Title",
-        "content": "Detailed summary of section or paragraph",
-        "confidence": 0.8,
-        "type": "process"
-      },
-      "position": {"x": 0, "y": 0},
-      "type": "default",
-      "style": {
-        "backgroundColor": "#3b82f6",
-        "color": "white",
-        "fontWeight": "500",
-        "border": "2px solid #1e40af",
-        "padding": 10,
-        "borderRadius": 12,
-        "width": 250,
-        "textAlign": "center",
-        "opacity": 0.8
-      }
-    }
+  "nodes": [  
+  {
+  data: {
+    label: { type: String, required: true },
+    content: { type: String, required: true },
+    confidence: { type: Number, required: true },
+    type: { type: String, required: true },
+  },
+  position: {
+    x: { type: Number, required: true },
+    y: { type: Number, required: true },
+  },
+  type: { type: String, default: "default" },
+  style: {
+    backgroundColor: { type: String },
+    color: { type: String },
+    fontWeight: { type: String },
+    border: { type: String },
+    padding: { type: Number },
+    borderRadius: { type: String },
+    width: { type: Number },
+    textAlign: { type: String },
+    opacity: { type: Number },
+  }
+  }  
   ],
   "edges": [
-    {
-      "id": "e1",
-      "source": "node1",
-      "target": "node2",
-      "type": "smoothstep",
-      "label": "next",
-      "style": {"stroke": "#3b82f6", "strokeWidth": 3.8, "opacity": 0.9},
-      "animated": true
+{  
+  source: { type: String, required: true }, 
+  target: { type: String, required: true }, 
+  type: { type: String, default: "smoothstep" },
+  label: { type: String },
+  style: {
+    stroke: { type: String },
+    strokeWidth: { type: Number },
+    opacity: { type: Number },
+  },
+  animated: { type: Boolean, default: false },
+  data: {
+    confidence: { type: Number },
+    rationale: { type: String },
     }
+  }
+
   ],
   "summary": {
     "nodes_processed": 5,

@@ -5,7 +5,7 @@ const EdgeScheme = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
              ref: 'Project'
         },
-  id: { type: String, required: true, unique: true },
+  id: { type: String},
   source: { type: String, required: true }, 
   target: { type: String, required: true }, 
   type: { type: String, default: "smoothstep" },
