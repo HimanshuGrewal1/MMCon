@@ -55,14 +55,9 @@ CLOUDINARY_API_SECRET=
 ## Sample `.env` for Frontend
 
 ```
-VITE_BACKEND_URL=
-VITE_CLOUDINARY_CLOUD_NAME=
-VITE_CLIENT_URL=
+
+VITE_API_URL
 ```
 
-```
 
----
 
-You can now copy and paste this directly into your `README.md` file ✅
-```
